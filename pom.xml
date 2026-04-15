@@ -32,6 +32,16 @@
         <lombok.version>1.18.44</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
 
+        <!-- Jakarta EE 11 API — Spring Boot 4.x requires Jakarta EE 11 -->
+        <jakarta.version>11.0.0</jakarta.version>
+
+        <!-- OpenAPI documentation — springdoc 3.x targets Spring Boot 4.x -->
+        <springdoc.version>3.0.2</springdoc.version>
+        <jackson-databind-nullable.version>0.2.10</jackson-databind-nullable.version>
+
+        <!-- OpenAPI code generator (Maven plugin) -->
+        <openapi-generator.version>7.21.0</openapi-generator.version>
+
     </properties>
 
     <!-- ================================================================== -->
@@ -41,25 +51,33 @@
 
         <!-- ── Spring Boot Starters ──────────────────────────────────── -->
 
-        <!-- Reactive web stack built on Project Reactor and Netty -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
 
-        <!-- Reactive relational database access via R2DBC -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-r2dbc</artifactId>
         </dependency>
 
+        <!-- Bean validation (JSR-380 / Jakarta Validation 3.1) — added for @Validated on controller -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- ── Jakarta EE API ────────────────────────────────────────── -->
+
+        <dependency>
+            <groupId>jakarta.platform</groupId>
+            <artifactId>jakarta.jakartaee-api</artifactId>
+            <version>${jakarta.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- ── Code Generation / Mapping Utilities ───────────────────── -->
 
-        <!--
-            Lombok: compile-time annotation processor that eliminates boilerplate
-            (getters, setters, constructors, builders, etc.).
-            Declared as "provided" so it is not bundled into the production JAR.
-        -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
@@ -67,14 +85,24 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--
-            MapStruct: compile-time, type-safe bean-mapping framework.
-            Generates mapper implementations during annotation processing.
-        -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
             <version>${mapstruct.version}</version>
+        </dependency>
+
+        <!-- ── API Documentation (OpenAPI / Swagger UI) ──────────────── -->
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openapitools</groupId>
+            <artifactId>jackson-databind-nullable</artifactId>
+            <version>${jackson-databind-nullable.version}</version>
         </dependency>
 
         <!-- ── Developer Experience ──────────────────────────────────── -->
@@ -106,14 +134,6 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
-            <!--
-                Maven Compiler Plugin
-                Targets Java 21 and wires two annotation processors in the
-                correct order:
-                  1. Lombok — must run first so generated code (e.g. @Builder) is
-                     visible to MapStruct when it builds mapper implementations.
-                  2. MapStruct — generates type-safe mapper classes from interfaces.
-            -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -134,10 +154,52 @@
                         </path>
                     </annotationProcessorPaths>
                     <compilerArgs>
-                        <!-- Register generated MapStruct mappers as Spring beans automatically -->
                         <compilerArg>-Amapstruct.defaultComponentModel=spring</compilerArg>
                     </compilerArgs>
                 </configuration>
+            </plugin>
+
+            <!--
+                OpenAPI Generator Maven Plugin
+                Reads the OpenAPI spec and generates controller interfaces and model classes.
+            -->
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>${openapi-generator.version}</version>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/in/openapi/Openapi.yaml</inputSpec>
+                            <output>${project.basedir}</output>
+                            <generatorName>spring</generatorName>
+                            <skipOverwrite>true</skipOverwrite>
+                            <library>spring-boot</library>
+                            <apiPackage>com.itx.gipriceservice.infrastructure.in.api.rest</apiPackage>
+                            <modelPackage>com.itx.gipriceservice.infrastructure.in.api.model</modelPackage>
+                            <generateApiTests>false</generateApiTests>
+                            <generateModels>true</generateModels>
+                            <generateModelTests>false</generateModelTests>
+                            <addCompileSourceRoot>false</addCompileSourceRoot>
+                            <addTestCompileSourceRoot>false</addTestCompileSourceRoot>
+                            <skipValidateSpec>false</skipValidateSpec>
+                            <configOptions>
+                                <dateLibrary>java8</dateLibrary>
+                                <useSpringBoot3>true</useSpringBoot3>
+                                <reactive>true</reactive>
+                                <interfaceOnly>true</interfaceOnly>
+                                <sourceFolder>src/main/java</sourceFolder>
+                                <booleanGetterPrefix>is</booleanGetterPrefix>
+                                <readOnly>true</readOnly>
+                                <useTags>true</useTags>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
