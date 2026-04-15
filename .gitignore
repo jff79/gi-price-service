@@ -1,0 +1,152 @@
+# ============================================================
+# Spring Boot / Maven – comprehensive .gitignore
+# ============================================================
+
+# ── Build output ─────────────────────────────────────────────
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# ── Maven wrapper binary ──────────────────────────────────────
+.mvn/wrapper/maven-wrapper.jar
+
+# ── Maven metadata files ──────────────────────────────────────
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# ── Compiled class files ──────────────────────────────────────
+*.class
+
+# ── Package / archive files ───────────────────────────────────
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# ── Log files ─────────────────────────────────────────────────
+*.log
+logs/
+
+# ── H2 database files (runtime-generated) ────────────────────
+*.db
+*.mv.db
+*.trace.db
+
+# ── JVM crash logs ────────────────────────────────────────────
+hs_err_pid*
+replay_pid*
+
+# ── OS metadata ───────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ── IntelliJ IDEA ─────────────────────────────────────────────
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+.idea_modules/
+atlassian-ide-plugin.xml
+.idea/replstate.xml
+.idea/httpRequests/
+.idea/caches/build_file_checksums.ser
+
+# ── Eclipse ───────────────────────────────────────────────────
+.classpath
+.project
+.settings/
+.loadpath
+.recommenders
+.factorypath
+.buildpath
+.checkstyle
+.springBeans
+.externalToolBuilders/
+RemoteSystemsTempFiles/
+Servers/
+.metadata/
+bin/
+*.launch
+
+# ── VS Code ───────────────────────────────────────────────────
+.vscode/
+!.vscode/extensions.json
+
+# ── NetBeans ──────────────────────────────────────────────────
+nbproject/private/
+nbproject/Makefile-*.mk
+nbproject/Package-*.bash
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# ── STS / Spring Tool Suite ───────────────────────────────────
+.apt_generated
+.sts4-cache/
+
+# ── Gradle (if ever added) ────────────────────────────────────
+.gradle/
+gradle-app.setting
+!gradle/wrapper/gradle-wrapper.jar
+
+# ── Git merge artefacts ───────────────────────────────────────
+*.orig
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+# ── Temporary files ───────────────────────────────────────────
+*.tmp
+*.bak
+*.swp
+*~
+*~.nib
+.mtj.tmp/
+tmp/
+
+# ── Environment / secrets (never commit these) ───────────────
+.env
+.env.*
+!.env.example
+*.pem
+*.p12
+*.jks
+local.properties
+
+# ── SonarQube ─────────────────────────────────────────────────
+.sonar/
+.sonarcloud.properties
+Checkmarx/Reports/
+
+# ── JaCoCo coverage reports ───────────────────────────────────
+jacoco.exec
+jacoco-report/
+
+# ── OpenAPI generator artefacts ──────────────────────────────
+.openapi-generator/
+.openapi-generator-ignore
+openapi-generator-ignore
