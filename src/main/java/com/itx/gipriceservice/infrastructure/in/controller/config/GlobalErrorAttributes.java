@@ -1,5 +1,6 @@
 package com.itx.gipriceservice.infrastructure.in.controller.config;
 
+import com.itx.gipriceservice.domain.exception.PriceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.webflux.error.DefaultErrorAttributes;
@@ -23,8 +24,9 @@ record ExceptionRule(Class<?> exceptionClass, HttpStatus status) {
 @Component
 public class GlobalErrorAttributes extends DefaultErrorAttributes {
 
-    // TODO: register domain exceptions here once the domain layer is defined (e.g. PriceNotFoundException → 404)
-    private final List<ExceptionRule> exceptionsRules = List.of();
+    private final List<ExceptionRule> exceptionsRules = List.of(
+            new ExceptionRule(PriceNotFoundException.class, HttpStatus.NOT_FOUND)
+    );
 
     @Override
     public Map<String, Object> getErrorAttributes(ServerRequest request, ErrorAttributeOptions options) {
