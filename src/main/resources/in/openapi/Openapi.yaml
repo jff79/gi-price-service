@@ -1,0 +1,84 @@
+openapi: 3.0.1
+info:
+  title: GI Price Service
+  description: Spring Boot reactive price-query service (GI Price Service)
+  version: '1.0'
+servers:
+  - url: 'http://localhost:8080/v1.0'
+    description: Generated server url
+paths:
+  /price:
+    get:
+      tags:
+        - price-controller
+      summary: Returns the applicable price for a product on a given date
+      operationId: getPrice
+      parameters:
+        - name: at
+          in: query
+          description: Application date-time (ISO-8601 with offset, e.g. 2020-06-14T10:00:00Z)
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: productId
+          in: query
+          description: Product identifier
+          required: true
+          schema:
+            type: integer
+            format: int64
+            minimum: 1
+        - name: brandId
+          in: query
+          description: Brand identifier
+          required: true
+          schema:
+            type: integer
+            format: int32
+            minimum: 1
+      responses:
+        '200':
+          description: Applicable price found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceResponse'
+        '400':
+          description: Missing or invalid request parameters
+        '404':
+          description: No applicable price found for the given criteria
+components:
+  schemas:
+    PriceResponse:
+      required:
+        - brandId
+        - endDate
+        - feeId
+        - cost
+        - productId
+        - startDate
+      type: object
+      properties:
+        brandId:
+          minimum: 1
+          type: integer
+          format: int32
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
+        feeId:
+          type: integer
+          format: int32
+          minimum: 1
+        productId:
+          type: integer
+          format: int64
+          minimum: 1
+        cost:
+          type: number
+          format: double
+          minimum: 0
