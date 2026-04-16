@@ -42,6 +42,25 @@
         <!-- OpenAPI code generator (Maven plugin) -->
         <openapi-generator.version>7.21.0</openapi-generator.version>
 
+        <!-- Test utilities -->
+        <archunit.version>1.4.1</archunit.version>
+
+        <!-- Code-coverage tooling -->
+        <jacoco.version>0.8.12</jacoco.version>
+
+        <!-- SonarQube integration: report coverage via JaCoCo -->
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.language>java</sonar.language>
+        <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+        <sonar.coverage.exclusions>
+            **/domain/model/**,
+            **/domain/exception/**,
+            **/infrastructure/in/api/model/**,
+            **/infrastructure/in/controller/config/Err*.*,
+            **/infrastructure/in/controller/config/GlobalErrorA*.*,
+            **/infrastructure/out/persistence/entity/**
+        </sonar.coverage.exclusions>
+
     </properties>
 
     <!-- ================================================================== -->
@@ -128,6 +147,17 @@
             <scope>test</scope>
         </dependency>
 
+        <!--
+            ArchUnit: enforces architectural constraints and layering rules
+            (e.g. domain must not depend on infrastructure) as ordinary JUnit tests.
+        -->
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit</artifactId>
+            <version>${archunit.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <!-- ================================================================== -->
@@ -207,6 +237,40 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!--
+                JaCoCo Maven Plugin — added together with integration tests to measure coverage.
+            -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>jacoco-initialize</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>jacoco-site</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/domain/model/**</exclude>
+                        <exclude>**/domain/exception/**</exclude>
+                        <exclude>**/infrastructure/in/api/model/**</exclude>
+                        <exclude>**/infrastructure/in/controller/config/Err*</exclude>
+                        <exclude>**/infrastructure/in/controller/config/GlobalErrorA*</exclude>
+                        <exclude>**/infrastructure/out/persistence/entity/**</exclude>
+                    </excludes>
+                </configuration>
             </plugin>
 
         </plugins>

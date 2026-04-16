@@ -5,92 +5,78 @@
  */
 package com.itx.gipriceservice.infrastructure.in.api.rest;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import java.time.OffsetDateTime;
-import com.itx.gipriceservice.infrastructure.in.api.model.PriceResponse;
-import io.swagger.v3.oas.annotations.ExternalDocumentation;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.Parameters;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
+
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
-import org.springframework.http.codec.multipart.Part;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.*;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import com.itx.gipriceservice.infrastructure.in.api.model.PriceResponse;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Generated;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import reactor.core.publisher.Mono;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-04-15T22:47:01.044403300+02:00[Europe/Madrid]", comments = "Generator version: 7.21.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-04-16T02:02:34.909684900+02:00[Europe/Madrid]", comments = "Generator version: 7.21.0")
 @Validated
+@RequestMapping("v1.0")
 @Tag(name = "price-controller", description = "the price-controller API")
 public interface PriceControllerApi {
 
-    String PATH_GET_PRICE = "/price";
-    /**
-     * GET /price : Returns the applicable price for a product on a given date
-     *
-     * @param at Application date-time (ISO-8601 with offset, e.g. 2020-06-14T10:00:00Z) (required)
-     * @param productId Product identifier (required)
-     * @param brandId Brand identifier (required)
-     * @return Applicable price found (status code 200)
-     *         or Missing or invalid request parameters (status code 400)
-     *         or No applicable price found for the given criteria (status code 404)
-     */
-    @Operation(
-        operationId = "getPrice",
-        summary = "Returns the applicable price for a product on a given date",
-        tags = { "price-controller" },
-        responses = {
-            @ApiResponse(responseCode = "200", description = "Applicable price found", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = PriceResponse.class))
-            }),
-            @ApiResponse(responseCode = "400", description = "Missing or invalid request parameters"),
-            @ApiResponse(responseCode = "404", description = "No applicable price found for the given criteria")
-        }
-    )
-    @RequestMapping(
-        method = RequestMethod.GET,
-        value = PriceControllerApi.PATH_GET_PRICE,
-        produces = { "application/json" }
-    )
-    default Mono<ResponseEntity<PriceResponse>> getPrice(
-        @NotNull @Parameter(name = "at", description = "Application date-time (ISO-8601 with offset, e.g. 2020-06-14T10:00:00Z)", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "at", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime at,
-        @NotNull @Min(value = 1L) @Parameter(name = "productId", description = "Product identifier", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "productId", required = true) Long productId,
-        @NotNull @Min(value = 1) @Parameter(name = "brandId", description = "Brand identifier", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "brandId", required = true) Integer brandId,
-        @Parameter(hidden = true) final ServerWebExchange exchange
-    ) {
-        Mono<Void> result = Mono.empty();
-    
-        exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
-        for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
-            if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                String exampleString = "{ \"cost\" : 0.5962133916683182, \"productId\" : 1, \"endDate\" : \"2000-01-23T04:56:07.000+00:00\", \"brandId\" : 1, \"feeId\" : 1, \"startDate\" : \"2000-01-23T04:56:07.000+00:00\" }";
-                result = ApiUtil.getExampleResponse(exchange, MediaType.valueOf("application/json"), exampleString);
-                break;
-            }
-        }
-    
+	String PATH_GET_PRICE = "/price";
 
-        return result.then(Mono.empty());
+	/**
+	 * GET /price : Returns the applicable price for a product on a given date
+	 *
+	 * @param at        Application date-time (ISO-8601 with offset, e.g.
+	 *                  2020-06-14T10:00:00Z) (required)
+	 * @param productId Product identifier (required)
+	 * @param brandId   Brand identifier (required)
+	 * @return Applicable price found (status code 200) or Missing or invalid
+	 *         request parameters (status code 400) or No applicable price found for
+	 *         the given criteria (status code 404)
+	 */
+	@Operation(operationId = "getPrice", summary = "Returns the applicable price for a product on a given date", tags = {
+			"price-controller" }, responses = {
+					@ApiResponse(responseCode = "200", description = "Applicable price found", content = {
+							@Content(mediaType = "application/json", schema = @Schema(implementation = PriceResponse.class)) }),
+					@ApiResponse(responseCode = "400", description = "Missing or invalid request parameters"),
+					@ApiResponse(responseCode = "404", description = "No applicable price found for the given criteria") })
+	@RequestMapping(method = RequestMethod.GET, value = PriceControllerApi.PATH_GET_PRICE, produces = {
+			"application/json" })
+	default Mono<ResponseEntity<PriceResponse>> getPrice(
+			@NotNull @Parameter(name = "at", description = "Application date-time (ISO-8601 with offset, e.g. 2020-06-14T10:00:00Z)", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "at", required = true) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime at,
+			@NotNull @Min(value = 1L) @Parameter(name = "productId", description = "Product identifier", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "productId", required = true) Long productId,
+			@NotNull @Min(value = 1) @Parameter(name = "brandId", description = "Brand identifier", required = true, in = ParameterIn.QUERY) @Valid @RequestParam(value = "brandId", required = true) Integer brandId,
+			@Parameter(hidden = true) final ServerWebExchange exchange) {
+		Mono<Void> result = Mono.empty();
 
-    }
+		exchange.getResponse().setStatusCode(HttpStatus.NOT_IMPLEMENTED);
+		for (MediaType mediaType : exchange.getRequest().getHeaders().getAccept()) {
+			if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+				String exampleString = "{ \"cost\" : 0.5962133916683182, \"productId\" : 1, \"endDate\" : \"2000-01-23T04:56:07.000+00:00\", \"brandId\" : 1, \"feeId\" : 1, \"startDate\" : \"2000-01-23T04:56:07.000+00:00\" }";
+				result = ApiUtil.getExampleResponse(exchange, MediaType.valueOf("application/json"), exampleString);
+				break;
+			}
+		}
+
+		return result.then(Mono.empty());
+
+	}
 
 }
