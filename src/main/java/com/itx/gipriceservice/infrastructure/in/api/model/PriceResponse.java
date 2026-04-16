@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * PriceResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-04-15T22:47:01.044403300+02:00[Europe/Madrid]", comments = "Generator version: 7.21.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2026-04-16T02:02:34.909684900+02:00[Europe/Madrid]", comments = "Generator version: 7.21.0")
 public class PriceResponse {
 
   private Integer brandId;

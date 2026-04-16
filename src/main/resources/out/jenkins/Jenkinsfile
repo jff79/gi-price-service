@@ -1,0 +1,25 @@
+node {
+
+  stage("Compilation") {
+    sh 'mvn clean install -DskipTests'
+  }
+
+  stage("Test Execution") {
+    sh 'mvn clean install'
+  }
+
+  stage("SonarQube Analysis") {
+    withCredentials([string(credentialsId: 'SONAR', variable: 'sonarToken')]) {
+      sh 'mvn sonar:sonar -Dsonar.login="$sonarToken" -Dsonar.coverage.exclusions=**/domain/model/**/*,**/infrastructure/in/api/**/*,**/infrastructure/in/controller/config/App*.*,**/infrastructure/in/controller/config/Err*.*,**/infrastructure/in/controller/config/Un*.*,**/infrastructure/out/persistence/entity/**/*'
+    }
+  }
+
+  stage("Docker Image Creation") {
+    sh 'docker build -t gi-price-service:1.0.0 .'
+  }
+
+  stage("Docker Image Deployment") {
+    sh 'docker run -p 8080:8080 gi-price-service:1.0.0 &'
+  }
+
+}
